@@ -1,0 +1,17 @@
+<div class="container-fluid" >
+    <div class="row mt-2">
+      <div class="col-sm "*ngFor="let product of allProducts">
+        <div class="card mt-4 " style="width: 18rem;" (click)="passToDetailPage(product.id)">
+          <img class="card-img-top" src="{{product.imageUrl.at(0)}}" alt="Card image cap">
+          <div class="card-body align-items-center">
+            <h5 class="card-title">{{product.name}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            <h3 class="card-title">{{product.price}}</h3>
+            <a href="#" class="btn btn-primary me-auto">Add to cart</a><br>
+            <a (click)="passToModifyPage(product.id)" class="btn btn-success me-auto mt-1 mb-1">Modify</a><br>
+            <a (click)="deleteProduct(product.id)" class="btn btn-danger me-auto">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
