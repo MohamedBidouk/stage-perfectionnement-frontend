@@ -15,8 +15,8 @@
 
 
       <li class="nav-item ms  -auto">
-        <button class="btn btn-outline-primary me-auto" >Log out</button>
-        <button class="btn btn-outline-primary me-auto" >Log in</button>
+        <button *ngIf="authService.isloggedIn" class="btn btn-outline-primary me-auto" (click)="logout()">Log out</button>
+        <button *ngIf="!authService.isloggedIn" class="btn btn-outline-primary me-auto" >Log in</button>
       </li>
     </ul>
   </div>

@@ -6,6 +6,7 @@ import {DetailledProductComponent} from "./detailled-product/detailled-product.c
 import {BrowserModule} from "@angular/platform-browser";
 import * as path from "path";
 import {ModifyComponentComponent} from "./modify-component/modify-component.component";
+import {LoginComponent} from "./login/login.component";
 
 
 const routes: Routes= [
@@ -13,7 +14,8 @@ const routes: Routes= [
   {path: "", redirectTo: "products", pathMatch:"full"},
   {path: "add-product", component: AddProductComponent},
   {path: "detail/:productId", component: DetailledProductComponent},
-  {path: "modify-product/:productId", component: ModifyComponentComponent}
+  {path: "modify-product/:productId", component: ModifyComponentComponent},
+  {path: "login", component: LoginComponent}
 
 ];
 @NgModule({

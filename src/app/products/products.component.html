@@ -2,7 +2,7 @@
     <div class="row mt-2">
       <div class="col-sm "*ngFor="let product of allProducts">
         <div class="card mt-4 " style="width: 18rem;" (click)="passToDetailPage(product.id)">
-          <img class="card-img-top" src="{{product.imageUrl.at(0)}}" alt="Card image cap">
+          <img style="height: 18rem; width: auto" class="card-img-top" src="{{product.imageUrl.at(0)}}" alt="Card image cap">
           <div class="card-body align-items-center">
             <h5 class="card-title">{{product.name}}</h5>
             <p class="card-text">{{product.description}}</p>

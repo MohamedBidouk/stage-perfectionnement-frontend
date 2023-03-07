@@ -33,7 +33,7 @@ export class ProductsComponent implements OnInit{
 
   loadAllProducts(){
     this.productService.getAllProducts().subscribe(allProducts=>{
-      this.allProducts = allProducts;console.log(allProducts);
+      this.allProducts = allProducts;
     })
   }
 
