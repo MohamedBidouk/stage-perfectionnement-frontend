@@ -13,15 +13,13 @@ import {UserComponent} from "../user/user.component";
 export class AddUserComponent {
   @Input()
   newUser = new User();
-  constructor(private userService: UserService,
-              public authService: AuthService) {
+  constructor(private userService: UserService) {
   }
   createUser(user: User){
     user.enabled = true;
-    this.userService.createUser(user).subscribe((userCreated)=>{
+    this.userService.createUser(user).subscribe(()=>{
       let role = new Role(2,"USER");
-      this.userService.addRoleToUser(user.username, role).subscribe((s)=>{
-      })
+      this.userService.addRoleToUser(user.username, role).subscribe();
     })
   }
 
