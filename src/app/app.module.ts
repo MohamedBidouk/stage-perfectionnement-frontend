@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BindingComponent } from './binding/binding.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
 import {RouterOutlet} from "@angular/router";
 import {ProductsComponent} from "./products/products.component";
@@ -16,6 +16,8 @@ import {MatIconModule} from "@angular/material/icon";
 import { ModifyComponentComponent } from './modify-component/modify-component.component';
 import {TokenInterceptor} from "./service/token.interceptor";
 import {LoginComponent} from "./login/login.component";
+import { UserComponent } from './user/user.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 
 
@@ -27,7 +29,9 @@ import {LoginComponent} from "./login/login.component";
     DetailledProductComponent,
     AddProductComponent,
     ModifyComponentComponent,
-    LoginComponent
+    LoginComponent,
+    UserComponent,
+    AddUserComponent
   ],
     imports: [
         BrowserModule,
@@ -37,7 +41,8 @@ import {LoginComponent} from "./login/login.component";
         HttpClientModule,
         BrowserAnimationsModule,
         MatSlideToggleModule,
-        MatIconModule
+        MatIconModule,
+        ReactiveFormsModule
     ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

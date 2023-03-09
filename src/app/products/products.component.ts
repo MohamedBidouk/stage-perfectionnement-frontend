@@ -5,6 +5,9 @@ import {Observable} from "rxjs";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {Fproduct} from "../model/fproduct.model";
 import {Router} from "@angular/router";
+import {AuthService} from "../service/auth.service";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ChoiceBoxModel} from "../model/ChoiceBox.model";
 
 @Component({
   selector: 'app-products',
@@ -18,11 +21,16 @@ export class ProductsComponent implements OnInit{
   allProducts?: Fproduct[];
   selectedFiles?: FileList;
   currentFile?: File;
-
   progress = 0;
   message = '';
+  form!: FormGroup;
   constructor(private productService: ProductService,
-              private router: Router) {
+              private router: Router,
+              public authService: AuthService,
+              private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      selected : this.formBuilder.array([],[Validators.required])
+    })
   }
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
@@ -30,13 +38,11 @@ export class ProductsComponent implements OnInit{
   ngOnInit(): void {
     this.loadAllProducts();
   }
-
   loadAllProducts(){
     this.productService.getAllProducts().subscribe(allProducts=>{
       this.allProducts = allProducts;
     })
   }
-
   upload(): void {
     this.progress = 0;
 
@@ -78,10 +84,28 @@ export class ProductsComponent implements OnInit{
       this.loadAllProducts();
     })
   }
+  deleteSelectedProducts(){
+    let i = 0;
+    while (i<this.form.value.selected.length){
+      this.deleteProduct(this.form.value.selected.at(i));
+      i++;
+    }
+    this.loadAllProducts();
+  }
   passToModifyPage(productId: number){
     this.router.navigate(['modify-product',productId]);
   }
   passToDetailPage(productId: number){
     this.router.navigate(['detail',productId]);
   }
+  productSelected(e: any){
+    const selected : FormArray = this.form.get('selected') as FormArray;
+    if (e.target.checked) {
+      selected.push(new FormControl(e.target.value));
+    } else {
+      const index = selected.controls.findIndex(x => x.value === e.target.value);
+      selected.removeAt(index);
+    }
+  }
+
 }

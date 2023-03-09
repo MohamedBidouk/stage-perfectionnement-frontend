@@ -7,6 +7,8 @@ import {BrowserModule} from "@angular/platform-browser";
 import * as path from "path";
 import {ModifyComponentComponent} from "./modify-component/modify-component.component";
 import {LoginComponent} from "./login/login.component";
+import {UserComponent} from "./user/user.component";
+import {AddUserComponent} from "./add-user/add-user.component";
 
 
 const routes: Routes= [
@@ -15,7 +17,9 @@ const routes: Routes= [
   {path: "add-product", component: AddProductComponent},
   {path: "detail/:productId", component: DetailledProductComponent},
   {path: "modify-product/:productId", component: ModifyComponentComponent},
-  {path: "login", component: LoginComponent}
+  {path: "login", component: LoginComponent},
+  {path: "users", component: UserComponent},
+  {path: "add-user", component: AddUserComponent}
 
 ];
 @NgModule({

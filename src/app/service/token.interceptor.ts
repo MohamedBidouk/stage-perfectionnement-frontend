@@ -20,7 +20,6 @@ export class TokenInterceptor implements HttpInterceptor {
       let reqWithToken = request.clone({
         setHeaders: {Authorization: "Bearer "+jwt}
       });
-      console.log(reqWithToken);
       return next.handle(reqWithToken);
     }
     return next.handle(request);

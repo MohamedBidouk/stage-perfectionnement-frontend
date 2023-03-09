@@ -17,7 +17,7 @@ export class LoginComponent {
   }
   onLoggedin(){
     this.authService.login(this.user).subscribe({
-      next: (data) => {
+      next: (data) => {console.log("this is"+data);
         let jwToken = data.headers.get('Authorization')!;
         this.authService.saveToken(jwToken);
         if(this.authService.isAdmin())
