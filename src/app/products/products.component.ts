@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {AuthService} from "../service/auth.service";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ChoiceBoxModel} from "../model/ChoiceBox.model";
+import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-products',
@@ -23,15 +24,14 @@ export class ProductsComponent implements OnInit{
   currentFile?: File;
   progress = 0;
   message = '';
-  form!: FormGroup;
+  initialSelection = [];
+  allowMultiSelect = true;
+  selection = new SelectionModel<Fproduct>(this.allowMultiSelect, this.initialSelection);
+
   constructor(private productService: ProductService,
               private router: Router,
               public authService: AuthService,
-              private formBuilder: FormBuilder) {
-    this.form = this.formBuilder.group({
-      selected : this.formBuilder.array([],[Validators.required])
-    })
-  }
+              ) { }
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
   }
@@ -40,7 +40,7 @@ export class ProductsComponent implements OnInit{
   }
   loadAllProducts(){
     this.productService.getAllProducts().subscribe(allProducts=>{
-      this.allProducts = allProducts;
+      this.allProducts = allProducts;console.log(allProducts);
     })
   }
   upload(): void {
@@ -84,28 +84,30 @@ export class ProductsComponent implements OnInit{
       this.loadAllProducts();
     })
   }
-  deleteSelectedProducts(){
-    let i = 0;
-    while (i<this.form.value.selected.length){
-      this.deleteProduct(this.form.value.selected.at(i));
-      i++;
-    }
-    this.loadAllProducts();
-  }
   passToModifyPage(productId: number){
     this.router.navigate(['modify-product',productId]);
   }
   passToDetailPage(productId: number){
     this.router.navigate(['detail',productId]);
   }
-  productSelected(e: any){
-    const selected : FormArray = this.form.get('selected') as FormArray;
-    if (e.target.checked) {
-      selected.push(new FormControl(e.target.value));
-    } else {
-      const index = selected.controls.findIndex(x => x.value === e.target.value);
-      selected.removeAt(index);
-    }
+  displayedColumns: string[] = ['select', 'name', 'description', 'price'];
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.allProducts!.length;
+    return numSelected == numRows;
   }
 
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.allProducts!.forEach(row => this.selection.select(row));
+  }
+  deleteSelected(){
+    this.selection.selected.forEach((fproduct)=>{
+      this.deleteProduct(fproduct.id);
+    });
+  }
 }

@@ -18,6 +18,12 @@ import {TokenInterceptor} from "./service/token.interceptor";
 import {LoginComponent} from "./login/login.component";
 import { UserComponent } from './user/user.component';
 import { AddUserComponent } from './add-user/add-user.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatButtonModule} from "@angular/material/button";
+import {MatListModule} from "@angular/material/list";
+import {MatInputModule} from "@angular/material/input";
 
 
 
@@ -42,7 +48,13 @@ import { AddUserComponent } from './add-user/add-user.component';
         BrowserAnimationsModule,
         MatSlideToggleModule,
         MatIconModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatButtonToggleModule,
+        MatButtonModule,
+        MatListModule,
+        MatInputModule
     ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

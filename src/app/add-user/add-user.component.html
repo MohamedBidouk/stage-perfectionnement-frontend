@@ -1,13 +1,18 @@
 <form>
-  <div class="form-group mb-3">
-    <label for="UserName">Username</label>
-    <input type="text" [(ngModel)]="newUser.username" [ngModelOptions]="{standalone:true}" class="form-control" id="Username" placeholder="username"  >
-  </div>
-  <div class="form-group mb-3">
-    <label for="password">Password</label>
-    <input type="password" [(ngModel)]="newUser.password" [ngModelOptions]="{standalone:true}" class="form-control" id="password" placeholder="Description">>
-  </div>
 
-  <button (click)="createUser(newUser)" type="submit" class="btn btn-primary">Submit</button>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Username</mat-label>
+      <input matInput placeholder="Username" type="text" [(ngModel)]="newUser.username" [ngModelOptions]="{standalone:true}">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Password</mat-label>
+      <input [(ngModel)]="newUser.password" [ngModelOptions]="{standalone:true}" type="password" matInput placeholder="Password">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="createUser(newUser)" type="submit">Primary</button>
+  </form>
+
 </form>
+
 

@@ -3,6 +3,8 @@ import {UserService} from "../service/user.service";
 import {User} from "../model/user.model";
 import {AuthService} from "../service/auth.service";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {SelectionModel} from "@angular/cdk/collections";
+import {Fproduct} from "../model/fproduct.model";
 
 @Component({
   selector: 'app-user',
@@ -11,13 +13,11 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
 })
 export class UserComponent implements OnInit{
   allUsers!: User[];
-  form!: FormGroup;
+  initialSelection = [];
+  allowMultiSelect = true;
+  selection = new SelectionModel<User>(this.allowMultiSelect, this.initialSelection);
   constructor(private userService: UserService,
-              public authService: AuthService,
-              private formBuilder: FormBuilder) {
-    this.form = this.formBuilder.group({
-      selected : this.formBuilder.array([],[Validators.required])
-    })
+              public authService: AuthService) {
   }
   ngOnInit(): void {
     this.loadAllUsers();
@@ -25,18 +25,9 @@ export class UserComponent implements OnInit{
 
   loadAllUsers(){
     this.userService.findAllUsers().subscribe((users)=>{
-      this.allUsers = users;
+      this.allUsers = users;console.log(users);
       }
     )
-  }
-  userSelected(e: any){
-    const selected : FormArray = this.form.get('selected') as FormArray;
-    if (e.target.checked) {
-      selected.push(new FormControl(e.target.value));
-    } else {
-      const index = selected.controls.findIndex(x => x.value === e.target.value);
-      selected.removeAt(index);
-    }
   }
   deleteUser(id: number){
     this.userService.deleteUser(id).subscribe(()=>{
@@ -44,10 +35,23 @@ export class UserComponent implements OnInit{
     })
   }
   deleteSelectedUsers(){
-    let i = 0;
-    while (i<this.form.value.selected.length){
-      this.deleteUser(this.form.value.selected.at(i));
-      i++;
-    }
+    this.selection.selected.forEach((user)=>{
+      this.deleteUser(user.user_id);
+    });
+  }
+  displayedColumns: string[] = ['select', 'username', 'enabled', 'roles', 'actions'];
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.allUsers!.length;
+    return numSelected == numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.allUsers!.forEach(row => this.selection.select(row));
   }
 }
