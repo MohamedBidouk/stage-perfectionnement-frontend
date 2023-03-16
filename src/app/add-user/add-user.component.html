@@ -1,18 +1,31 @@
-<form>
+<div >
+  <form>
+    <mat-accordion >
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Add user
+          </mat-panel-title>
+          <mat-panel-description>
+            {{panelOpenState ? 'Fill the form' : 'Click here to add'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form class="example-form mt-2">
+          <mat-form-field class="example-full-width">
+            <mat-label>Username</mat-label>
+            <input matInput placeholder="Username" type="text" [(ngModel)]="newUser.username" [ngModelOptions]="{standalone:true}">
+          </mat-form-field>
 
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-label>Username</mat-label>
-      <input matInput placeholder="Username" type="text" [(ngModel)]="newUser.username" [ngModelOptions]="{standalone:true}">
-    </mat-form-field>
-
-    <mat-form-field class="example-full-width">
-      <mat-label>Password</mat-label>
-      <input [(ngModel)]="newUser.password" [ngModelOptions]="{standalone:true}" type="password" matInput placeholder="Password">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createUser(newUser)" type="submit">Primary</button>
+          <mat-form-field class="example-full-width ms-3">
+            <mat-label>Password</mat-label>
+            <input [(ngModel)]="newUser.password" [ngModelOptions]="{standalone:true}" type="password" matInput placeholder="Password">
+          </mat-form-field>
+          <button mat-raised-button class="ms-3" color="primary" (click)="createUser(newUser)" type="submit">Add User</button>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
   </form>
-
-</form>
+</div>
 
 

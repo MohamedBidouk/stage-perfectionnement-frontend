@@ -54,5 +54,8 @@ export class ProductService {
   updateProduct(product: Product, id: number): Observable<Product>{
     return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
   }
+  searchPerCategory(idCat: number){
+
+  }
 
 }

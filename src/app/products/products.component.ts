@@ -6,9 +6,9 @@ import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {Fproduct} from "../model/fproduct.model";
 import {Router} from "@angular/router";
 import {AuthService} from "../service/auth.service";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ChoiceBoxModel} from "../model/ChoiceBox.model";
 import {SelectionModel} from "@angular/cdk/collections";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogModifyProductComponent} from "../dialog-modify-product/dialog-modify-product.component";
 
 @Component({
   selector: 'app-products',
@@ -27,10 +27,13 @@ export class ProductsComponent implements OnInit{
   initialSelection = [];
   allowMultiSelect = true;
   selection = new SelectionModel<Fproduct>(this.allowMultiSelect, this.initialSelection);
+  panelOpenState = false;
+  product!: Product;
 
   constructor(private productService: ProductService,
               private router: Router,
               public authService: AuthService,
+              public dialog: MatDialog
               ) { }
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
@@ -90,7 +93,7 @@ export class ProductsComponent implements OnInit{
   passToDetailPage(productId: number){
     this.router.navigate(['detail',productId]);
   }
-  displayedColumns: string[] = ['select', 'name', 'description', 'price'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'price', 'actions'];
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -109,5 +112,18 @@ export class ProductsComponent implements OnInit{
     this.selection.selected.forEach((fproduct)=>{
       this.deleteProduct(fproduct.id);
     });
+  }
+  openDialog(productId: number): void {
+    this.productService.consultProduct(productId).subscribe((prod)=>{
+      this.product = prod;
+      const dialogRef = this.dialog.open(DialogModifyProductComponent, {
+        data: {product: this.product},
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.loadAllProducts();
+      });
+    });
+
   }
 }

@@ -9,6 +9,7 @@ import {ModifyComponentComponent} from "./modify-component/modify-component.comp
 import {LoginComponent} from "./login/login.component";
 import {UserComponent} from "./user/user.component";
 import {AddUserComponent} from "./add-user/add-user.component";
+import {CategoryComponent} from "./category/category.component";
 
 
 const routes: Routes= [
@@ -19,7 +20,8 @@ const routes: Routes= [
   {path: "modify-product/:productId", component: ModifyComponentComponent},
   {path: "login", component: LoginComponent},
   {path: "users", component: UserComponent},
-  {path: "add-user", component: AddUserComponent}
+  {path: "add-user", component: AddUserComponent},
+  {path: "category", component: CategoryComponent}
 
 ];
 @NgModule({

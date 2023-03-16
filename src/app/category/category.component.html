@@ -1,25 +1,35 @@
-<div *ngIf="!authService.isAdmin()" class="container-fluid" >
-  <div class="row mt-2">
-    <img src="https://www.elcaminohealth.org/sites/default/files/styles/3_1__1200x400/public/2020-03/health-benefits-of-honey-1100x355.jpg?h=9aa7b5f2&itok=zm0SJt1v">
-  </div>
-    <div class="row mt-2">
-      <div class="col-sm "*ngFor="let product of allProducts">
-        <div class="card mt-4 " style="width: 18rem;" (click)="passToDetailPage(product.id)">
-          <img style="height: 18rem; width: auto" class="card-img-top" src="{{product.imageUrl.at(0)}}" alt="Card image cap">
-          <div class="card-body align-items-center">
-            <h5 class="card-title">{{product.name}}</h5>
-            <p class="card-text">{{product.description}}</p>
-            <h3 class="card-title">{{product.price}}</h3>
-            <a href="#" class="btn btn-primary me-auto"><h3>Add to cart <i class="bi bi-bag-plus-fill"></i></h3></a>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container mt-2">
+  <form>
+    <mat-accordion >
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Add Category
+          </mat-panel-title>
+          <mat-panel-description>
+            {{panelOpenState ? 'Fill the form' : 'Click here to add'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form class="example-form mt-2">
+          <mat-form-field class="example-full-width">
+            <mat-label>Category name</mat-label>
+            <input matInput placeholder="Category name" type="text" [(ngModel)]="category.name" [ngModelOptions]="{standalone:true}">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width ms-3">
+            <mat-label>Description</mat-label>
+            <input [(ngModel)]="category.description" [ngModelOptions]="{standalone:true}" type="text" matInput placeholder="Description">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="ms-3" (click)="createCategory(category)" type="submit">Add category</button>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
 </div>
 <div *ngIf="authService.isAdmin()" class="container-fluid mt-4">
-
   <div class="col-xl-8 col-md-8 col-sm-8">
-    <mat-table [dataSource]="allProducts!" class="mat-elevation-z8">
+    <mat-table [dataSource]="allCategories!" class="mat-elevation-z8">
       <!-- Position Column -->
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
@@ -49,16 +59,11 @@
       </ng-container>
 
       <!-- Symbol Column -->
-      <ng-container matColumnDef="price">
-        <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
         <mat-cell *matCellDef="let element" >
-          <button mat-button (click)="deleteProduct(element.id)" color="warn" >Delete</button>
-          <button mat-button (click)="openDialog(element.id)" color="primary" >Modify</button>
+          <button mat-button matTooltip="Modify" (click)="openDialog(element.id)" color="primary" ><mat-icon aria-hidden="false" aria-label="Edit" fontIcon="edit"></mat-icon></button>
+          <button mat-button matTooltip="Delete" (click)="deleteCategory(element.id)" color="warn" ><mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete_forever"></mat-icon></button>
         </mat-cell>
       </ng-container>
 
@@ -70,10 +75,6 @@
   <section>
     <div class="button-row mt-2">
       <button mat-raised-button color="warn" (click)="deleteSelected()">Delete Selected</button>
-      <button mat-raised-button color="primary" routerLink="/add-product">Add product</button>
     </div>
   </section>
 </div>
-
-
-

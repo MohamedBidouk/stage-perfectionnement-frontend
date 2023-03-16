@@ -24,6 +24,12 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatButtonModule} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatInputModule} from "@angular/material/input";
+import { CategoryComponent } from './category/category.component';
+import {MatExpansionModule} from "@angular/material/expansion";
+import { DialogModifyCategoryComponent } from './dialog-modify-category/dialog-modify-category.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { DialogModifyProductComponent } from './dialog-modify-product/dialog-modify-product.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 
@@ -37,7 +43,10 @@ import {MatInputModule} from "@angular/material/input";
     ModifyComponentComponent,
     LoginComponent,
     UserComponent,
-    AddUserComponent
+    AddUserComponent,
+    CategoryComponent,
+    DialogModifyCategoryComponent,
+    DialogModifyProductComponent
   ],
     imports: [
         BrowserModule,
@@ -54,7 +63,10 @@ import {MatInputModule} from "@angular/material/input";
         MatButtonToggleModule,
         MatButtonModule,
         MatListModule,
-        MatInputModule
+        MatInputModule,
+        MatExpansionModule,
+        MatDialogModule,
+        MatTooltipModule
     ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

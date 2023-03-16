@@ -13,6 +13,7 @@ import {UserComponent} from "../user/user.component";
 export class AddUserComponent {
   @Input()
   newUser = new User();
+  panelOpenState = false;
   constructor(private userService: UserService) {
   }
   createUser(user: User){
