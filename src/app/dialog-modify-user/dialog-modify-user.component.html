@@ -1,0 +1,21 @@
+<form>
+  <h1 mat-dialog-title>Modify {{data.user.user_id}}</h1>
+  <div mat-dialog-content>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="data.user.username" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-label>Roles</mat-label>
+      <div *ngFor="let role of allRoles">
+        <mat-checkbox [checked]="isRoleExist(role.role, data.user.roles)" (change)="roleChecked(role.role)">{{role.role}}</mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button (click)="onOkClick()" [mat-dialog-close]="data.user.username" cdkFocusInitial>Ok</button>
+  </div>
+</form>

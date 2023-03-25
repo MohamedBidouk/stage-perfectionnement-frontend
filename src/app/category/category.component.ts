@@ -3,9 +3,10 @@ import {CategoryService} from "../service/category.service";
 import {Category} from "../model/category.model";
 import {AuthService} from "../service/auth.service";
 import {SelectionModel} from "@angular/cdk/collections";
-import {Fproduct} from "../model/fproduct.model";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogModifyCategoryComponent} from "../dialog-modify-category/dialog-modify-category.component";
+import {Product} from "../model/product.model";
+import {ProductService} from "../service/product.service";
 
 @Component({
   selector: 'app-category',
@@ -23,9 +24,12 @@ export class CategoryComponent implements OnInit{
   description!: string;
   name!: string;
   categoryData!: Category;
+  products!: Product[];
+  displayedColumnsProducts: string[] = ['name', 'description', 'price', 'actions'];
   constructor(private categoryService: CategoryService,
               public authService: AuthService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private productService: ProductService) {
   }
   ngOnInit(): void {
     this.getAllCategories();
@@ -74,6 +78,10 @@ export class CategoryComponent implements OnInit{
         this.getAllCategories();
       });
     });
-
+  }
+  touchedRow(catId: number){
+    this.productService.getProductsByCategory(catId).subscribe((products)=>{
+      this.products = products;console.log(products);
+    });
   }
 }

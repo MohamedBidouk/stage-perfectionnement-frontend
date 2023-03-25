@@ -2,9 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from "../service/user.service";
 import {User} from "../model/user.model";
 import {AuthService} from "../service/auth.service";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {SelectionModel} from "@angular/cdk/collections";
-import {Fproduct} from "../model/fproduct.model";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogModifyUserComponent} from "../dialog-modify-user/dialog-modify-user.component";
 
 @Component({
   selector: 'app-user',
@@ -16,8 +16,10 @@ export class UserComponent implements OnInit{
   initialSelection = [];
   allowMultiSelect = true;
   selection = new SelectionModel<User>(this.allowMultiSelect, this.initialSelection);
+  user!: User;
   constructor(private userService: UserService,
-              public authService: AuthService) {
+              public authService: AuthService,
+              public dialog: MatDialog) {
   }
   ngOnInit(): void {
     this.loadAllUsers();
@@ -34,9 +36,26 @@ export class UserComponent implements OnInit{
       this.loadAllUsers();
     })
   }
+  modifyUser(userId: number){
+
+  }
   deleteSelectedUsers(){
     this.selection.selected.forEach((user)=>{
       this.deleteUser(user.user_id);
+    });
+  }
+  openDialog(userId: number): void {
+    this.userService.consultUser(userId).subscribe((user)=>{
+      this.user = user;console.log(user);
+      const dialogRef = this.dialog.open(DialogModifyUserComponent, {
+        data: {user: this.user},
+        height: '500px',
+        width: '600px'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.loadAllUsers();
+      });
     });
   }
   displayedColumns: string[] = ['select', 'username', 'enabled', 'roles', 'actions'];

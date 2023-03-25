@@ -30,6 +30,11 @@ import { DialogModifyCategoryComponent } from './dialog-modify-category/dialog-m
 import {MatDialogModule} from "@angular/material/dialog";
 import { DialogModifyProductComponent } from './dialog-modify-product/dialog-modify-product.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatSelectModule} from "@angular/material/select";
+import { FileDragNDropDirective } from './file-drag-ndrop.directive';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { DialogModifyUserComponent } from './dialog-modify-user/dialog-modify-user.component';
 
 
 
@@ -46,28 +51,33 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     AddUserComponent,
     CategoryComponent,
     DialogModifyCategoryComponent,
-    DialogModifyProductComponent
+    DialogModifyProductComponent,
+    FileDragNDropDirective,
+    DialogConfirmComponent,
+    DialogModifyUserComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        RouterOutlet,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MatSlideToggleModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatButtonToggleModule,
-        MatButtonModule,
-        MatListModule,
-        MatInputModule,
-        MatExpansionModule,
-        MatDialogModule,
-        MatTooltipModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    RouterOutlet,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatButtonToggleModule,
+    MatButtonModule,
+    MatListModule,
+    MatInputModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatSnackBarModule
+  ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,

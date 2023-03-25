@@ -28,4 +28,10 @@ export class UserService {
   removeRoleToUser(username: string, role: Role){
     return this.http.put(`${this.apiUrl}removeRole/${username}`, role);
   }
+  modifyUser(userId: number, user: User){
+    return this.http.put(`${this.apiUrl}modify/${userId}`, user);
+  }
+  consultUser(userId: number):Observable<User>{
+    return this.http.get<User>(`${this.apiUrl}${userId}`);
+  }
 }

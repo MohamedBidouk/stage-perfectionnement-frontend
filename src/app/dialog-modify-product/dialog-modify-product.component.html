@@ -19,6 +19,20 @@
         <input matInput [(ngModel)]="data.product.price" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
     </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label *ngIf="productCat">{{productCat.name}}</mat-label>
+        <mat-label *ngIf="!productCat">Select category</mat-label>
+        <mat-select [(value)]="idCat" (selectionChange)="categoryChanged(idCat)">
+          <mat-option *ngFor="let category of data.allCategories" [value]="category.id">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <img style="width: 300px" src="{{data.product.imageUrl}}">
+    </div>
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No Thanks</button>

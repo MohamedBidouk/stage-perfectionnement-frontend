@@ -1,4 +1,4 @@
-<div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto mt-5">
+<!--<div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto mt-5">
   <div class="p-3 mb-2 ">
     <div class="row">
       <h2>Add Product</h2>
@@ -51,4 +51,70 @@
       <button type="submit" class="btn btn-primary btn-block text-uppercase" (click)="createProduct(product)">Add Product Now</button>
     </div>
   </div>
-</div>
+</div>-->
+<form class="needs-validation">
+  <div class="card mt-4">
+    <section class="pb-4 mb-3">
+      <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+        <div class="card-title mt-3">
+          <div class="row">
+            <h1 class="card-title col-3 ms-4">Add new Product </h1>
+            <div class="col-2 ms-auto ps-3">
+              <select class="form-control" [(ngModel)]="idCategoryToAdd" [ngModelOptions]="{standalone:true}" aria-label="Category select" required>
+                <option [value]="null">Select</option>
+                <option *ngFor="let category of allCategories" [value]="category.id" >{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-3 pb-2">
+            <label for="ProductName">Product Name</label>
+            <input type="text" [(ngModel)]="product.name" [ngModelOptions]="{standalone:true}" class="form-control" id="ProductName" placeholder="Product name" required >
+            <div class="valid-feedback">Valid product name.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div style="padding: 15px;">
+            <div>
+              <div *ngIf="files.length==0" (click)="clickSelector()" class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)">
+
+                <div  class="text-wrapper" >
+                  <div class="centered">
+                    <input type="file" accept="image/*" name="file" id="file" (change)="onFileChange($event)" multiple required>
+                    <label ><span class="textLink">Select your file</span> or Drop it here!</label>
+                  </div>
+                </div>
+              </div>
+              <div class="valid-feedback">Valid product photo.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
+              <div class="row fileItem" *ngFor="let f of files; let ind = index">
+                <div class="col-sm-12 fileItemIconDiv" (click)="openConfirmDialog(ind);">
+                  <mat-icon>highlight_off</mat-icon>
+                </div>
+                <div class="col-sm-12 fileItemText">
+                  <span>{{f.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 py-2">
+            <label for="ProductDescription">Description</label>
+            <textarea type="text" [(ngModel)]="product.description" [ngModelOptions]="{standalone:true}" rows="3" class="form-control" id="ProductDescription" placeholder="Description" required></textarea>
+            <div class="valid-feedback">Valid description.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div class="mb-3 py-2">
+            <label for="ProductPrice">Price</label>
+            <input type="number" [(ngModel)]="product.price" [ngModelOptions]="{standalone:true}" class="form-control" id="ProductPrice" placeholder="Price" required>
+            <div class="valid-feedback">Valid price.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div class="mb-3 pb-2">
+            <button class="btn btn-primary d-block w-100" type="submit" (click)="createProduct(product)"><mat-icon>cloud_upload</mat-icon>
+              Upload product</button>
+          </div>
+        </div>
+      </div>
+    </section >
+  </div>
+</form>

@@ -1,16 +1,23 @@
-import {Component, Input} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {ProductService} from "../service/product.service";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
 import {Product} from "../model/product.model";
 import {Router} from "@angular/router";
+import {CategoryService} from "../service/category.service";
+import {Category} from "../model/category.model";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {DialogConfirmComponent} from "../dialog-confirm/dialog-confirm.component";
+import {DOCUMENT} from "@angular/common";
+
+
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css']
 })
-export class AddProductComponent {
+export class AddProductComponent implements OnInit{
   @Input()
   product = new Product();
   selectedFiles?: FileList;
@@ -18,13 +25,21 @@ export class AddProductComponent {
   progress = 0;
   message = '';
   preview = '';
-  fileInfos?: Observable<any>;
   id!: number | undefined;
+  idCategoryToAdd!: number;
+  allCategories!: Category[];
+  public files: any[] = [];
 
   constructor(private productService: ProductService,
-              private router: Router) {
+              private categoryService: CategoryService,
+              private _snackBar: MatSnackBar,
+              public dialog: MatDialog,
+              @Inject(DOCUMENT) document: Document) {
   }
-  upload(): void {
+  ngOnInit(): void {
+    this.getAllCategories();
+  }
+  upload(idProduct: number): void {
     this.progress = 0;
     this.preview = '';
 
@@ -34,7 +49,7 @@ export class AddProductComponent {
       if (file) {
         this.currentFile = file;
 
-        this.productService.upload(this.currentFile, this.id!).subscribe({
+        this.productService.upload(this.currentFile, idProduct).subscribe({
           next: (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round(100 * event.loaded / event.total);
@@ -61,11 +76,38 @@ export class AddProductComponent {
       this.selectedFiles = undefined;
     }
   }
-  selectFile(event: any): void {
+  createProduct(newProduct: Product){
+    let form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
+    if (!form.checkValidity()) {
+      event!.preventDefault();
+      event!.stopPropagation();
+    }else {
+
+
+      this.categoryService.getCategory(this.idCategoryToAdd).subscribe((cat)=>{
+        newProduct.category = cat;
+      });
+      this.productService.addProducts(newProduct).subscribe({next:(value:Product)=>{
+          this.id = value.id;console.log(this.id);
+          this.upload(value.id!);
+        }});
+    }
+    form.classList.add('was-validated');
+  }
+  getAllCategories(){
+    this.categoryService.getAllCategories().subscribe((categories)=>{
+      this.allCategories= categories;console.log(this.allCategories);
+    });
+  }
+  onFileChange(evt: any){
+    this.files = Object.keys(evt.target.files).map(key => evt.target.files[+key]);
+    this._snackBar.open("Successfully upload!", 'Close', {
+      duration: 2000,
+    });
     this.message = '';
     this.preview = '';
     this.progress = 0;
-    this.selectedFiles = event.target.files;
+    this.selectedFiles = evt.target.files;
 
     if (this.selectedFiles) {
       const file: File | null = this.selectedFiles.item(0);
@@ -85,13 +127,34 @@ export class AddProductComponent {
       }
     }
   }
-  createProduct(newProduct: Product){
-    this.productService.addProducts(newProduct).subscribe({next:(value:Product)=>{
-      this.id = value.id;console.log(this.id);
-    }});
+  deleteFile(f: any){
+    this.selectedFiles = undefined;
+    this.files = this.files.filter(function(w){ return w.name != f.name });
+    this._snackBar.open("Successfully delete!", 'Close', {
+      duration: 2000,
+    });
   }
-  uploadButton(){
-    const i = document.getElementById('fileInput') as HTMLInputElement;
-      i.click();
+  openConfirmDialog(pIndex: any): void {
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      panelClass: 'modal-xs'
+    });
+    dialogRef.componentInstance.fName = this.files[pIndex].name;
+    dialogRef.componentInstance.fIndex = pIndex;
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.deleteFromArray(result);
+      }
+    });
+  }
+
+  deleteFromArray(index: any) {
+    console.log(this.files);
+    console.log(this.selectedFiles);
+    this.files.splice(index, 1);
+  }
+  clickSelector(){
+    document.getElementById('file')!.click()
   }
 }

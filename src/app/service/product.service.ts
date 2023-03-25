@@ -4,6 +4,7 @@ import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/h
 import {Observable} from "rxjs";
 import {ProductPhoto} from "../model/productPhoto.model";
 import {Fproduct} from "../model/fproduct.model";
+import {Category} from "../model/category.model";
 const optionRequete = {
   headers: new HttpHeaders({
     'Access-Control-Allow-Origin':'*'
@@ -54,8 +55,17 @@ export class ProductService {
   updateProduct(product: Product, id: number): Observable<Product>{
     return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
   }
-  searchPerCategory(idCat: number){
-
+  searchPerName(name: string):Observable<Fproduct[]>{
+    return this.http.get<Fproduct[]>(`${this.apiUrl}/productsByName/${name}`);
+  }
+  getProductsByCategory(idCategory: number):Observable<Fproduct[]>{
+    return this.http.get<Fproduct[]>(`${this.apiUrl}/prodsByCat/${idCategory}`);
+  }
+  setCategory(productId: number, categoryId: number):Observable<Product>{
+    return this.http.put(`${this.apiUrl}/setCategory/${productId}`, categoryId);
+  }
+  getCategory(productId: number):Observable<Category>{
+    return this.http.get(`${this.apiUrl}/getCategory/${productId}`);
   }
 
 }

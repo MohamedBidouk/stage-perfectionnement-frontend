@@ -9,6 +9,10 @@ import {AuthService} from "../service/auth.service";
 import {SelectionModel} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogModifyProductComponent} from "../dialog-modify-product/dialog-modify-product.component";
+import {CategoryService} from "../service/category.service";
+import {Category} from "../model/category.model";
+import {Cart} from "../model/cart.model";
+import {CartItem} from "../model/cartItem.model";
 
 @Component({
   selector: 'app-products',
@@ -17,6 +21,7 @@ import {DialogModifyProductComponent} from "../dialog-modify-product/dialog-modi
 })
 export class ProductsComponent implements OnInit{
   products!: Product[];
+  allCategories!: Category[];
   id!: number;
   fileInfos?: Observable<any>;
   allProducts?: Fproduct[];
@@ -27,19 +32,24 @@ export class ProductsComponent implements OnInit{
   initialSelection = [];
   allowMultiSelect = true;
   selection = new SelectionModel<Fproduct>(this.allowMultiSelect, this.initialSelection);
-  panelOpenState = false;
   product!: Product;
+  idCategory! : number;
+  productName!: string;
+  cartItems: CartItem[] = new Array<CartItem>();
+  userCart: Cart = new Cart(this.authService.loggedUser, this.cartItems);
 
   constructor(private productService: ProductService,
+              private categoryService: CategoryService,
               private router: Router,
               public authService: AuthService,
               public dialog: MatDialog
               ) { }
-  selectFile(event: any): void {
-    this.selectedFiles = event.target.files;
-  }
   ngOnInit(): void {
     this.loadAllProducts();
+    this.getAllCategories();
+  }
+  selectFile(event: any): void {
+    this.selectedFiles = event.target.files;
   }
   loadAllProducts(){
     this.productService.getAllProducts().subscribe(allProducts=>{
@@ -117,13 +127,59 @@ export class ProductsComponent implements OnInit{
     this.productService.consultProduct(productId).subscribe((prod)=>{
       this.product = prod;
       const dialogRef = this.dialog.open(DialogModifyProductComponent, {
-        data: {product: this.product},
+        data: {product: this.product, allCategories: this.allCategories},
+        height: '500px',
+        width: '600px'
       });
 
       dialogRef.afterClosed().subscribe(result => {
         this.loadAllProducts();
       });
     });
+  }
+  getAllCategories(){
+    this.categoryService.getAllCategories().subscribe((categories)=>{
+      this.allCategories= categories;
+    });
+  }
+  onCategorySelect(catId: number){
+    if (this.idCategory != undefined){
+      this.productService.getProductsByCategory(catId).subscribe((products)=>{
+        this.allProducts = products;console.log(products);
+      });
+    }else this.loadAllProducts();
+  }
+  searchByName(event: any){
+    if (event.target.value != null && event.target.value.length>0){
+      this.productService.searchPerName(event.target.value).subscribe((prods)=>{
+        this.allProducts = prods;
+      });
+    }else {
+      this.loadAllProducts();
+    }
+  }
+  setCategory(productId: number, categoryId: number){
+   this.productService.setCategory(productId, categoryId).subscribe((prod)=>{
+     console.log(prod);
+   })
+  }
+  getCategory(productId: number): Category{
+    let cat = new Category();
+    this.productService.getCategory(productId).subscribe((category)=>{
+      cat = category;
+    });
+    return cat;
+  }
+  addToCart(product: Product){
+    let cartIt = new CartItem(product, 1);
 
+    this.userCart.cartItems.push(cartIt);
+    console.log(this.userCart.cartItems.indexOf(cartIt));
+    let total = 0;
+    this.userCart.cartItems.forEach((cartItem)=>{
+      total += cartItem.product.price! * cartItem.quantity;
+    })
+    this.userCart.totalCost = total;
+    console.log(this.userCart);
   }
 }
